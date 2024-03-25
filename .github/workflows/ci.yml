@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 8.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore "src/Simple.OData.Client.sln"
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build "src/Simple.OData.Client.sln" --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity normal
