@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
-
+#if !BENCHMARKS
 using Xunit;
+#endif
 
 namespace Simple.OData.Client.Benchmarks;
 
@@ -18,7 +19,9 @@ public class CrmEmployee
 			.For<he_employee>()
 			.FindEntriesAsync().ConfigureAwait(false);
 
+#if !BENCHMARKS
 		Assert.Equal(10, result.ToList().Count);
+#endif
 	}
 
 	[Benchmark]
@@ -29,6 +32,8 @@ public class CrmEmployee
 			.Filter(x => x.he_employeenumber == 123456)
 			.FindEntryAsync().ConfigureAwait(false);
 
+#if !BENCHMARKS
 		Assert.Equal(123456, result.he_employeenumber);
+#endif
 	}
 }

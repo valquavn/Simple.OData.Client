@@ -8,13 +8,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<DefineConstants>$(DefineConstants);MOCK_HTTP</DefineConstants>
+		<DefineConstants>$(DefineConstants);MOCK_HTTP;BENCHMARKS</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.*" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.*" />
-		<PackageReference Include="xunit" Version="2.*" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,10 +38,6 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\crm_schema.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Properties\" />
 	</ItemGroup>
 
 </Project>

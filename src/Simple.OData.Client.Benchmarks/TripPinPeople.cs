@@ -1,7 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Newtonsoft.Json;
 using Simple.OData.Client.Tests;
+#if !BENCHMARKS
 using Xunit;
+#endif
 
 namespace Simple.OData.Client.Benchmarks;
 
@@ -21,7 +23,9 @@ public class TripPinPeople
 			.Expand(x => new { x.Trips, x.Friends })
 			.FindEntriesAsync().ConfigureAwait(false);
 
+#if !BENCHMARKS
 		Assert.Equal(20, result.ToList().Count);
+#endif
 	}
 
 	[Benchmark]
@@ -32,7 +36,9 @@ public class TripPinPeople
 			.Expand(new[] { "Trips", "Friends" })
 			.FindEntriesAsync().ConfigureAwait(false);
 
+#if !BENCHMARKS
 		Assert.Equal(20, result.ToList().Count);
+#endif
 	}
 
 	[Benchmark]
@@ -40,6 +46,9 @@ public class TripPinPeople
 	{
 		var json = File.ReadAllText(@"..\..\..\..\..\..\..\Resources\" + "TripPin_result_20.json");
 		var result = JsonConvert.DeserializeObject<PeopleCollection>(json);
+
+#if !BENCHMARKS
 		Assert.Equal(20, result.People.Length);
+#endif
 	}
 }

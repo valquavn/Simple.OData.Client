@@ -3,7 +3,9 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
+#if !BENCHMARKS
 using Xunit;
+#endif
 
 namespace Simple.OData.Client.Tests;
 
@@ -181,8 +183,10 @@ public class MockingRequestExecutor
 		using var stream = new FileStream(GenerateMockDataPath(), FileMode.Open);
 		var ser = new DataContractJsonSerializer(typeof(SerializableHttpRequestMessage));
 		var savedRequest = ser.ReadObject(stream) as SerializableHttpRequestMessage;
+#if !BENCHMARKS
 		Assert.Equal(savedRequest.Method, request.Method.ToString());
 		Assert.Equal(savedRequest.RequestUri.AbsolutePath.Split('/').Last(), request.RequestUri.AbsolutePath.Split('/').Last());
+#endif
 		var expectedHeaders = new Dictionary<string, IEnumerable<string>>();
 		foreach (var header in savedRequest.RequestHeaders)
 		{
@@ -214,7 +218,9 @@ public class MockingRequestExecutor
 			var expectedContent = savedRequest.Content;
 			expectedContent = AdjustContent(expectedContent);
 			var actualContent = AdjustContent(await request.Content.ReadAsStringAsync());
+#if !BENCHMARKS
 			Assert.Equal(expectedContent, actualContent);
+#endif
 		}
 	}
 
@@ -276,15 +282,21 @@ public class MockingRequestExecutor
 		IDictionary<string, IEnumerable<string>> expectedHeaders,
 		IDictionary<string, IEnumerable<string>> actualHeaders)
 	{
+#if !BENCHMARKS
 		Assert.Equal(expectedHeaders.Count, actualHeaders.Count);
+#endif
 		foreach (var header in expectedHeaders)
 		{
+#if !BENCHMARKS
 			Assert.Contains(header.Key, actualHeaders.Keys);
+#endif
 			if (header.Key != "Content-Length")
 			{
 				var expectedValue = AdjustBatchIds(header.Value.FirstOrDefault());
 				var actualValue = AdjustBatchIds(actualHeaders[header.Key].FirstOrDefault());
+#if !BENCHMARKS
 				Assert.Equal(expectedValue, actualValue);
+#endif
 			}
 		}
 	}
@@ -414,11 +426,8 @@ public static partial class ODataClientSettingsExtensionMethods
 		var stackTrace = new System.Diagnostics.StackTrace();
 		for (var frameNumber = 2; ; frameNumber++)
 		{
-			var stackFrame = stackTrace.GetFrame(frameNumber);
-			if (stackFrame is null)
-			{
+			var stackFrame = stackTrace.GetFrame(frameNumber) ?? 
 				throw new InvalidOperationException("Attempt to retrieve a frame beyond the call stack.");
-			}
 
 			var method = stackFrame.GetMethod();
 			var methodName = new string(method.Name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray());
