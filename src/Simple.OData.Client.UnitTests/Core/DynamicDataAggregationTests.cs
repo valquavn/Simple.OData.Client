@@ -539,7 +539,9 @@ public class DynamicDataAggregationTests : CoreTestBase
 		Assert.Equal("Products?$apply=groupby%28%28Category%2FCategoryName%29%2Caggregate%28UnitPrice%20with%20average%20as%20AverageUnitPrice%29%29%2Fgroupby%28%28AverageUnitPrice%29%2Caggregate%28%24count%20as%20CategoriesCount%29%29", commandText);
 	}
 
+#if NET7_0_OR_GREATER
 	[Fact]
+#endif
 	public async Task GroupByWithAggregationThenOrderByAsDictionary()
 	{
 		var x = ODataDynamic.Expression;
