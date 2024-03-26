@@ -4,6 +4,7 @@
 name: CI Build & Release
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
 
@@ -31,10 +32,10 @@ jobs:
 
     - name: Get Current Time
       id: build_date
-      run: echo "::set-output name=date::$(date +'%Y%m%d-%H%M%S')"
+      run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> "$GITHUB_OUTPUT"
 
     - name: Create NuGet Packages
-      run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=debug /p:Version="${{ vars.VERSION_MAJORMINOR }}0-CI-${{ steps.build_date.outputs.date }}""
+      run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=debug /p:Version="${{ vars.VERSION_MAJORMINOR }}.0-CI-${{ steps.build_date.outputs.date }}"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
