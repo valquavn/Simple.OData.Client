@@ -15,7 +15,6 @@
 			Simple.OData.Client.ODataClient
 		</Description>
 		<PackageTags>$(PackageTags)'odata v3';</PackageTags>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
