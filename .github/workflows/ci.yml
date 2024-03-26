@@ -19,7 +19,7 @@ jobs:
       id: build_date
       run: |
           echo "date=${(date +'%Y%m%d-%H%M%S')}" >> "$GITHUB_OUTPUT"
-          echo ${{ steps.build_date.outputs.date }}
+          echo "${{ steps.build_date.outputs.date }}"
 
     - uses: actions/checkout@v4
   
