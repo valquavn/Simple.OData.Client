@@ -18,9 +18,9 @@ jobs:
     - name: Get Current Time
       id: build_date
       run: |
-          DATETIME=$(date +'%Y%m%d-%H%M%S')
-          echo "date=${DATETIME}" >> "$GITHUB_OUTPUT"
-          echo "${DATETIME}"
+          $CurrentDateTime = Get-Date -Format "yyyyMMdd-HHmmss"
+          echo "date=$CurrentDateTime" >> "$GITHUB_OUTPUT"
+          echo "$CurrentDateTime"
 
     - uses: actions/checkout@v4
   
