@@ -27,17 +27,11 @@ jobs:
     # - name: Test
     #   run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
 
-    - name: Create Artifacts Directory
-      run: mkdir packages
+    - name: Publish NuGet packages
+      run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages
 
-    - name: Copy Files to Artifacts Directory
-      shell: powershell
-      run: |
-        Copy-Item -Path src/**/*.nupkg -Destination packages
-        Copy-Item -Path src/**/*.snupkg -Destination packages
-
-    - name: Archive Artifacts
+    - name: Upload packages as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: package-artifacts
-        path: packages/
+        name: nuget-packages
+        path: packages
