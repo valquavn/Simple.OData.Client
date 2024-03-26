@@ -18,8 +18,9 @@ jobs:
     - name: Get Current Time
       id: build_date
       run: |
-          echo "date=${(date +'%Y%m%d-%H%M%S')}" >> "$GITHUB_OUTPUT"
-          echo "${{ steps.build_date.outputs.date }}"
+          var DATETIME=$(date +'%Y%m%d-%H%M%S')
+          echo "date=${DATETIME}" >> "$GITHUB_OUTPUT"
+          echo "${DATETIME}"
 
     - uses: actions/checkout@v4
   
