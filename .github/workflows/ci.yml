@@ -14,6 +14,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
+    - name: Get Current Time
+      id: build_date
+      run: |
+          echo "date=${(date +'%Y%m%d-%H%M%S')}" >> "$GITHUB_OUTPUT"
+          echo ${{ steps.build_date.outputs.date }}
+
     - uses: actions/checkout@v4
   
     - name: Setup .NET
@@ -29,10 +36,6 @@ jobs:
 
     # - name: Test
     #   run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
-
-    - name: Get Current Time
-      id: build_date
-      run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> "$GITHUB_OUTPUT"
 
     - name: Create NuGet Packages
       run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=debug /p:Version="${{ vars.VERSION_MAJORMINOR }}.0-CI-${{ steps.build_date.outputs.date }}"
