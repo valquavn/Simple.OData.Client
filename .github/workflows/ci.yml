@@ -14,11 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+  
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
-    - name: Restore dependencies
+
+    - name: Restore Dependencies
       run: dotnet restore "src/Simple.OData.Client.sln"
 
     - name: Build
@@ -27,11 +29,11 @@ jobs:
     # - name: Test
     #   run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
 
-    - name: Publish NuGet packages
+    - name: Create NuGet Packages
       run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=debug
 
-    - name: Upload packages as artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
       with:
         name: nuget-packages
         path: packages
