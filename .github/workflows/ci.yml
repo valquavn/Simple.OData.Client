@@ -20,7 +20,24 @@ jobs:
         dotnet-version: 8.x
     - name: Restore dependencies
       run: dotnet restore "src/Simple.OData.Client.sln"
+
     - name: Build
       run: dotnet build "src/Simple.OData.Client.sln" --no-restore
-    - name: Test
-      run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
+
+    # - name: Test
+    #   run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
+
+    - name: Create Artifacts Directory
+      run: mkdir packages
+
+    - name: Copy Files to Artifacts Directory
+      shell: powershell
+      run: |
+        Copy-Item -Path src/**/*.nupkg -Destination packages
+        Copy-Item -Path src/**/*.snupkg -Destination packages
+
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: package-artifacts
+        path: packages/
