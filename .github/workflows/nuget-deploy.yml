@@ -17,6 +17,8 @@ jobs:
 
     - name: Download Artifacts
       uses: actions/download-artifact@v4
+      with:
+        github-token: ${{ secrets.GH_PAT }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
