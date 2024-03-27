@@ -1,22 +1,22 @@
 name: Push to NuGet
 
-# on:
-#   workflow_dispatch:
-#   workflow_run:
-#     workflows: ["CI Build & Package", "Release Build & Package"]
-#     types:
-#       - completed
+on:
+  workflow_dispatch:
+  # workflow_run:
+  #   workflows: ["CI Build & Package", "Release Build & Package"]
+  #   types:
+  #     - completed
 
-# jobs:
-#   deployment:
-#     runs-on: windows-latest
+jobs:
+  deployment:
+    runs-on: windows-latest
 
-#     steps:
+    steps:
 
-#     - name: Download Artifacts
-#       uses: actions/download-artifact@v4
-#       with:
-#         github-token: ${{ github.token }}
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        github-token: ${{ github.token }}
 
 #     - name: Setup .NET
 #       uses: actions/setup-dotnet@v4
