@@ -19,8 +19,11 @@ jobs:
       id: build_date
       run: |
           $CurrentDateTime = Get-Date -Format "yyyyMMdd-HHmmss"
-          echo "date=$CurrentDateTime" >> "$GITHUB_OUTPUT"
+          echo "date=${CurrentDateTime}" >> "$GITHUB_OUTPUT"
           echo "$CurrentDateTime"
+
+    - name: Get Current Time from Last Step
+      run: echo "${{ steps.build_date.outputs.date }}"
 
     - uses: actions/checkout@v4
   
