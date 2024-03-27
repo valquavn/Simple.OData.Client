@@ -2,16 +2,10 @@
 
 namespace Simple.OData.Client;
 
-public abstract class RequestWriterBase : IRequestWriter
+public abstract class RequestWriterBase(ISession session, Lazy<IBatchWriter> deferredBatchWriter) : IRequestWriter
 {
-	protected readonly ISession _session;
-	protected readonly Lazy<IBatchWriter> _deferredBatchWriter;
-
-	protected RequestWriterBase(ISession session, Lazy<IBatchWriter> deferredBatchWriter)
-	{
-		_session = session;
-		_deferredBatchWriter = deferredBatchWriter;
-	}
+	protected readonly ISession _session = session;
+	protected readonly Lazy<IBatchWriter> _deferredBatchWriter = deferredBatchWriter;
 
 	protected bool IsBatch => _deferredBatchWriter is not null;
 
@@ -63,7 +57,7 @@ public abstract class RequestWriterBase : IRequestWriter
 		IDictionary<string, string>? headers = null)
 	{
 		var segments = commandText.Split('/');
-		if (segments.Length > 1 && segments.Last().Contains("."))
+		if (segments.Length > 1 && segments.Last().Contains('.'))
 		{
 			commandText = commandText.Substring(0, commandText.Length - segments.Last().Length - 1);
 		}

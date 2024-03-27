@@ -1,19 +1,12 @@
 ﻿namespace Simple.OData.Client;
 
-public abstract class MetadataBase : IMetadata
+public abstract class MetadataBase(INameMatchResolver nameMatchResolver, bool ignoreUnmappedProperties, bool unqualifiedNameCall) : IMetadata
 {
-	protected MetadataBase(INameMatchResolver nameMatchResolver, bool ignoreUnmappedProperties, bool unqualifiedNameCall)
-	{
-		IgnoreUnmappedProperties = ignoreUnmappedProperties;
-		NameMatchResolver = nameMatchResolver;
-		UnqualifiedNameCall = unqualifiedNameCall;
-	}
+	public bool IgnoreUnmappedProperties { get; } = ignoreUnmappedProperties;
 
-	public bool IgnoreUnmappedProperties { get; }
+	public INameMatchResolver NameMatchResolver { get; } = nameMatchResolver;
 
-	public INameMatchResolver NameMatchResolver { get; }
-
-	public bool UnqualifiedNameCall { get; }
+	public bool UnqualifiedNameCall { get; } = unqualifiedNameCall;
 
 	public abstract string GetEntityCollectionExactName(string collectionName);
 
@@ -123,7 +116,7 @@ public abstract class MetadataBase : IMetadata
 
 	protected static bool SegmentsIncludeTypeSpecification(IEnumerable<string> segments)
 	{
-		return segments.Last().Contains(".");
+		return segments.Last().Contains('.');
 	}
 
 	protected static bool IsSingleSegmentWithTypeSpecification(IEnumerable<string> segments)
@@ -183,6 +176,6 @@ public abstract class MetadataBase : IMetadata
 
 	public static IEnumerable<string> GetCollectionPathSegments(string path)
 	{
-		return path.Split('/').Select(x => x.Contains("(") ? x.Substring(0, x.IndexOf("(", StringComparison.Ordinal)) : x);
+		return path.Split('/').Select(x => x.Contains('(') ? x.Substring(0, x.IndexOf("(", StringComparison.Ordinal)) : x);
 	}
 }

@@ -1,4 +1,4 @@
-using Simple.OData.Client;
+using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -18,9 +18,9 @@ public class BatchTests : TestBase
 
 		var client = new ODataClient(settings);
 		var product = await client.FindEntryAsync("Products?$filter=ProductName eq 'Test1'");
-		Assert.NotNull(product);
+		product.Should().NotBeNull();
 		product = await client.FindEntryAsync("Products?$filter=ProductName eq 'Test2'");
-		Assert.NotNull(product);
+		product.Should().NotBeNull();
 	}
 
 	[Fact]

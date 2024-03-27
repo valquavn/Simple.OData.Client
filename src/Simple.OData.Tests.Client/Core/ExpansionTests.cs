@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -18,7 +18,7 @@ public class ExpansionTests : CoreTestBase
 			.For<Employee>()
 			.Expand(x => x.Subordinates);
 		var commandText = await command.GetCommandTextAsync();
-		Assert.Equal(expectedCommand, commandText);
+		commandText.Should().Be(expectedCommand);
 	}
 
 	[Theory]
@@ -31,7 +31,7 @@ public class ExpansionTests : CoreTestBase
 			.For<Employee>()
 			.Expand("*");
 		var commandText = await command.GetCommandTextAsync();
-		Assert.Equal(expectedCommand, commandText);
+		commandText.Should().Be(expectedCommand);
 	}
 
 	[Theory]
@@ -510,21 +510,21 @@ public class ExpansionTests : CoreTestBase
 	{
 		var client = CreateClient("ClientProductSku.xml");
 
-		string[] CreateUpdateExpandTables = {
+		string[] CreateUpdateExpandTables = [
 				"Product/ProductCategory/Category/CategorySalesArea",
 				"ClientProductSkuPriceList",
 				"ClientProductSkuSalesArea",
 				"Product/SupplierProductSkuClient/SupplierProductSku/SupplierProductSkuPriceList/SupplierPriceList",
 				"Product/SupplierProductSkuClient/SupplierProductSku/SupplierProductSkuOnHand/Warehouse"
-			};
+			];
 
-		string[] CreateUpdateSelectColumns = {
+		string[] CreateUpdateSelectColumns = [
 				"PartNo", "ClientId", "ErpName", "EanCode",
 				"Product/Id","Product/ManufacturerId",
 				"Product/ProductCategory/IsPrimary",
 				"Product/ProductCategory/Category/Code",
 				"ClientProductSkuPriceList/CurrencyId"
-			};
+			];
 
 		var expectedResult =
 			@"ClientProductSkus/FunctionService.GetCreateUpdateSkuDelta(clientId=35,offsetInMinutes=2000)?" +

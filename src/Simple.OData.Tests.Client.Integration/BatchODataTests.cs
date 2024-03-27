@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -30,13 +30,8 @@ public class BatchODataTestsV4Json : BatchODataTests
 	public BatchODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class BatchODataTests : ODataTestBase
+public abstract class BatchODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected BatchODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task Success()
 	{
@@ -46,9 +41,9 @@ public abstract class BatchODataTests : ODataTestBase
 		await batch.ExecuteAsync();
 
 		var product = await _client.FindEntryAsync("Products?$filter=Name eq 'Test1'");
-		Assert.NotNull(product);
+		product.Should().NotBeNull();
 		product = await _client.FindEntryAsync("Products?$filter=Name eq 'Test2'");
-		Assert.NotNull(product);
+		product.Should().NotBeNull();
 	}
 
 	// OData.org sample service doesn't fail on this request
@@ -137,7 +132,7 @@ public abstract class BatchODataTests : ODataTestBase
 		var batch = new ODataBatch(_serviceUri);
 		batch += async x => product1 = await x.InsertEntryAsync("Products", CreateProduct(5015, "Test15"));
 		batch += async x => product2 = await x.InsertEntryAsync("Products", CreateProduct(5016, "Test16"));
-		batch += async x => await x.InsertEntryAsync("Categories", CreateCategory(5017, "Test17", new[] { product1, product2 }), false);
+		batch += async x => await x.InsertEntryAsync("Categories", CreateCategory(5017, "Test17", [product1, product2]), false);
 		await batch.ExecuteAsync();
 
 		var category = await _client
@@ -187,7 +182,7 @@ public abstract class BatchODataTests : ODataTestBase
 		var batch = new ODataBatch(client, reuseSession: true);
 		batch += async x => product1 = await x.InsertEntryAsync("Products", CreateProduct(5015, "Test15"));
 		batch += async x => product2 = await x.InsertEntryAsync("Products", CreateProduct(5016, "Test16"));
-		batch += async x => await x.InsertEntryAsync("Categories", CreateCategory(5017, "Test17", new[] { product1, product2 }), false);
+		batch += async x => await x.InsertEntryAsync("Categories", CreateCategory(5017, "Test17", [product1, product2]), false);
 		await batch.ExecuteAsync();
 
 		var category = await _client

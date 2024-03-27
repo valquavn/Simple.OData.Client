@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using Simple.OData.Client;
+using FluentAssertions;
 using Simple.OData.Client.V4.Adapter.Extensions;
 using Xunit;
 
@@ -31,7 +31,7 @@ public class TripPinRESTierTestsV4Json : TripPinTestBase
 			}))
 			.FindEntriesAsync();
 
-		Assert.True(peopleGroupedByGender.All(x => x.Count > 0));
+		peopleGroupedByGender.All(x => x.Count > 0).Should().BeTrue();
 	}
 
 	[Fact]
@@ -54,10 +54,8 @@ public class TripPinRESTierTestsV4Json : TripPinTestBase
 	}
 }
 
-public abstract class TripPinTests : TripPinTestBase
+public abstract class TripPinTests(string serviceUri, ODataPayloadFormat payloadFormat) : TripPinTestBase(serviceUri, payloadFormat)
 {
-	protected TripPinTests(string serviceUri, ODataPayloadFormat payloadFormat) : base(serviceUri, payloadFormat) { }
-
 	[Fact]
 	public async Task FindAllPeople()
 	{
@@ -83,7 +81,7 @@ public abstract class TripPinTests : TripPinTestBase
 
 			foreach (var person in people)
 			{
-				Assert.NotNull(person.Annotations.Id);
+				person.Annotations.Id.Should().NotBeNull();
 				Assert.NotNull(person.Annotations.ReadLink);
 				Assert.NotNull(person.Annotations.EditLink);
 			}

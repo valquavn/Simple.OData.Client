@@ -1,5 +1,5 @@
 ﻿using System.Dynamic;
-using Simple.OData.Client;
+using FluentAssertions;
 using Xunit;
 using Entry = System.Collections.Generic.Dictionary<string, object>;
 
@@ -16,7 +16,7 @@ public class InsertTests : TestBase
 			.Set(new Entry() { { "ProductName", "Test1" }, { "UnitPrice", 18m } })
 			.InsertEntryAsync();
 
-		Assert.Equal("Test1", product["ProductName"]);
+		product["ProductName"].Should().Be("Test1");
 	}
 
 	[Fact]
@@ -28,7 +28,7 @@ public class InsertTests : TestBase
 			.Set(new Entry() { { "ProductName", "Test1" }, { "UnitPrice", 18.0d } })
 			.InsertEntryAsync();
 
-		Assert.Equal("Test1", product["ProductName"]);
+		product["ProductName"].Should().Be("Test1");
 	}
 
 	[Fact]

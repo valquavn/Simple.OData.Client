@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -13,7 +13,7 @@ public class FindTypedTests : TestBase
 			.For<Product>()
 			.Filter(x => x.ProductName == "Chai")
 			.FindEntryAsync();
-		Assert.Equal("Chai", product.ProductName);
+		product.ProductName.Should().Be("Chai");
 	}
 
 	[Fact]
@@ -24,7 +24,7 @@ public class FindTypedTests : TestBase
 			.For<Product>()
 			.Filter(x => x.ProductName == "Chai")
 			.FindEntryAsync();
-		Assert.Equal("Chai", product.ProductName);
+		product.ProductName.Should().Be("Chai");
 	}
 
 	[Fact]

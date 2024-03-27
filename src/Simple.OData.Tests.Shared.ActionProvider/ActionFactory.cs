@@ -3,12 +3,12 @@ using System.Reflection;
 
 namespace Simple.OData.Tests.Shared.ActionProvider;
 
-public class ActionFactory
+public class ActionFactory(IDataServiceMetadataProvider metadata)
 {
-	private readonly IDataServiceMetadataProvider _metadata;
+	private readonly IDataServiceMetadataProvider _metadata = metadata;
 
 	//TODO: make this list complete
-	private static readonly Type[] __primitives = new[] {
+	private static readonly Type[] __primitives = [
 			typeof(bool),
 			typeof(short),
 			typeof(int),
@@ -22,12 +22,7 @@ public class ActionFactory
 			typeof(long?),
 			typeof(decimal?),
 			typeof(Guid?)
-		};
-
-	public ActionFactory(IDataServiceMetadataProvider metadata)
-	{
-		_metadata = metadata;
-	}
+		];
 
 	public IEnumerable<ServiceAction> GetActions(Type typeWithActions)
 	{
@@ -125,12 +120,7 @@ public class ActionFactory
 			return ResourceType.GetPrimitiveResourceType(type);
 		}
 
-		var resourceType = _metadata.Types.SingleOrDefault(s => s.Name == type.Name);
-		if (resourceType is null)
-		{
-			throw new Exception($"Generic action parameter type {type} not supported");
-		}
-
+		var resourceType = _metadata.Types.SingleOrDefault(s => s.Name == type.Name) ?? throw new Exception($"Generic action parameter type {type} not supported");
 		return resourceType;
 	}
 

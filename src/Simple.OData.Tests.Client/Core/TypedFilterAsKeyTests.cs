@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.OData;
+﻿using FluentAssertions;
+using Microsoft.Data.OData;
 using Simple.OData.Client;
 using Xunit;
 
@@ -33,7 +34,7 @@ public class TypedFilterAsKeyV4Tests : TypedFilterAsKeyTests
 			.Function("PassThroughIntCollection")
 			.Set(new Dictionary<string, object>() { { "numbers", new[] { 1, 2, 3 } } });
 		var commandText = await command.GetCommandTextAsync();
-		Assert.Equal("PassThroughIntCollection(numbers=@p1)?@p1=[1,2,3]", commandText);
+		commandText.Should().Be("PassThroughIntCollection(numbers=@p1)?@p1=[1,2,3]");
 	}
 
 	[Fact]

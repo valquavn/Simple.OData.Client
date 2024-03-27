@@ -1,5 +1,5 @@
 ﻿using System.Dynamic;
-using Simple.OData.Client;
+using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -29,13 +29,8 @@ public class InsertODataTestsV4Json : InsertODataTests
 	public InsertODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class InsertODataTests : ODataTestBase
+public abstract class InsertODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected InsertODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task Insert()
 	{
@@ -44,7 +39,7 @@ public abstract class InsertODataTests : ODataTestBase
 			.Set(CreateProduct(1001, "Test1"))
 			.InsertEntryAsync();
 
-		Assert.Equal("Test1", product["Name"]);
+		product["Name"].Should().Be("Test1");
 	}
 
 	[Fact]
@@ -55,7 +50,7 @@ public abstract class InsertODataTests : ODataTestBase
 			.Set(CreateProduct(1002, "Test1"))
 			.InsertEntryAsync();
 
-		Assert.True((int)product["ID"] > 0);
+		((int)product["ID"] > 0).Should().BeTrue();
 		Assert.Equal("Test1", product["Name"]);
 	}
 

@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -90,7 +90,7 @@ public class BatchDynamicTests : TestBase
 		}
 		catch (WebRequestException exception)
 		{
-			Assert.NotNull(exception.Response);
+			exception.Response.Should().NotBeNull();
 		}
 	}
 
@@ -115,7 +115,7 @@ public class BatchDynamicTests : TestBase
 		}
 		catch (WebRequestException exception)
 		{
-			Assert.NotNull(exception.Response);
+			exception.Response.Should().NotBeNull();
 		}
 	}
 

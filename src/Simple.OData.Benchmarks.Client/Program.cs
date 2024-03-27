@@ -21,6 +21,6 @@ public static class Utils
 		{
 			MetadataDocument = MetadataResolver.GetMetadataDocument(metadataFilename),
 			IgnoreUnmappedProperties = true
-		}.WithHttpResponses(new[] { @"..\..\..\..\..\..\..\Resources\" + responseFilename }));
+		}.WithHttpResponses([@"..\..\..\..\..\..\..\Resources\" + responseFilename]));
 	}
 }

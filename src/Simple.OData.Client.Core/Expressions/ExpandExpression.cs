@@ -20,16 +20,11 @@ internal static class ExpandExpression
 	}
 }
 
-internal class ExpandExpressionVisitor : ExpressionVisitor
+internal class ExpandExpressionVisitor(ITypeCache typeCache) : ExpressionVisitor
 {
-	private readonly ITypeCache _typeCache;
+	private readonly ITypeCache _typeCache = typeCache;
 
-	public ExpandExpressionVisitor(ITypeCache typeCache)
-	{
-		_typeCache = typeCache;
-	}
-
-	public List<ODataExpandAssociation> ExpandAssociations { get; } = new List<ODataExpandAssociation>();
+	public List<ODataExpandAssociation> ExpandAssociations { get; } = [];
 
 	protected override Expression VisitMember(MemberExpression node)
 	{

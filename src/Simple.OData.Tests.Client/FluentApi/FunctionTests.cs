@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -35,7 +35,7 @@ public class FunctionTests : TestBase
 			.Set(new Entry() { { "text", "abc" } })
 			.ExecuteAsScalarAsync<string>();
 
-		Assert.Equal("abc", result);
+		result.Should().Be("abc");
 	}
 
 	[Fact]
@@ -48,7 +48,7 @@ public class FunctionTests : TestBase
 			.Set(new Entry() { { "text", "abc" } })
 			.ExecuteAsSingleAsync();
 
-		Assert.Equal("abc", result);
+		result.Should().Be("abc");
 	}
 
 	[Fact]

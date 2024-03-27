@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -28,13 +28,8 @@ public class MetadataODataTestsV4Json : MetadataODataTests
 	public MetadataODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class MetadataODataTests : ODataTestBase
+public abstract class MetadataODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected MetadataODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task FilterWithMetadataDocument()
 	{
@@ -51,7 +46,7 @@ public abstract class MetadataODataTests : ODataTestBase
 			.For("Products")
 			.Filter("Name eq 'Milk'")
 			.FindEntriesAsync();
-		Assert.Equal("Milk", products.Single()["Name"]);
+		products.Single()["Name"].Should().Be("Milk");
 	}
 
 	[Fact]

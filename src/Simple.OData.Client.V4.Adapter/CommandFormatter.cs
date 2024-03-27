@@ -3,14 +3,9 @@ using Simple.OData.Client.V4.Adapter.Extensions;
 
 namespace Simple.OData.Client.V4.Adapter;
 
-public class CommandFormatter : CommandFormatterBase
+public class CommandFormatter(ISession session) : CommandFormatterBase(session)
 {
 	private const string StarString = "*";
-
-	public CommandFormatter(ISession session)
-		: base(session)
-	{
-	}
 
 	public override FunctionFormat FunctionFormat => FunctionFormat.Key;
 
@@ -212,7 +207,7 @@ public class CommandFormatter : CommandFormatterBase
 	{
 		if (first.Name != second.Name && first.Name != "*")
 		{
-			return new[] { first, second };
+			return [first, second];
 		}
 
 		var result = first.Clone();
@@ -236,7 +231,7 @@ public class CommandFormatter : CommandFormatterBase
 
 		result.ExpandAssociations.AddRange(mergedExpandAssociations);
 
-		return new[] { result };
+		return [result];
 	}
 
 	private static ODataExpandAssociation MergeOrderByColumns(ODataExpandAssociation expandAssociation, KeyValuePair<string, bool> orderByColumn)
@@ -325,7 +320,7 @@ public class CommandFormatter : CommandFormatterBase
 
 	private static bool HasMultipleSegments(string path)
 	{
-		return path.Contains("/");
+		return path.Contains('/');
 	}
 
 	private string FormatFirstSegment(string path)

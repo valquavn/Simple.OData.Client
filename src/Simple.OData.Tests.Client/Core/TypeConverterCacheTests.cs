@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -11,7 +11,7 @@ public class TypeConverterCacheTests
 		var c1 = CustomConverters.Converter("foo");
 		var c2 = CustomConverters.Converter("bar");
 
-		Assert.NotSame(c1, c2);
+		c2.Should().NotBeSameAs(c1);
 	}
 
 	[Fact]
@@ -20,7 +20,7 @@ public class TypeConverterCacheTests
 		var c1 = CustomConverters.Converter("foo");
 		var c2 = CustomConverters.Converter("foo");
 
-		Assert.Same(c1, c2);
+		c2.Should().BeSameAs(c1);
 	}
 
 	[Fact]

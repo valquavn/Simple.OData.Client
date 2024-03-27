@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -29,16 +29,11 @@ public class MediaODataTestsV4Json : MediaODataTests
 	public MediaODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class MediaODataTests : ODataTestBase
+public abstract class MediaODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
 	private class PersonDetail
 	{
 		public string Photo { get; set; }
-	}
-
-	protected MediaODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
 	}
 
 	[Fact]
@@ -54,7 +49,7 @@ public abstract class MediaODataTests : ODataTestBase
 			.Media()
 			.GetStreamAsync();
 		var text = Utils.StreamToString(stream);
-		Assert.Contains("stream data", text);
+		text.Should().Contain("stream data");
 	}
 
 	[Fact]
@@ -67,7 +62,7 @@ public abstract class MediaODataTests : ODataTestBase
 			.Media("Photo")
 			.GetStreamAsync();
 		var text = Utils.StreamToString(stream);
-		Assert.Contains("named stream data", text);
+		text.Should().Contain("named stream data");
 	}
 
 	[Fact]

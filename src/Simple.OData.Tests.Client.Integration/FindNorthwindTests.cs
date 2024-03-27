@@ -1,6 +1,5 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
-
 using Entry = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Simple.OData.Tests.Client;
@@ -47,10 +46,8 @@ public class FindNorthwindTestsV4Json : FindNorthwindTests
 	public FindNorthwindTestsV4Json() : base(NorthwindV4ReadOnlyUri, ODataPayloadFormat.Json) { }
 }
 
-public abstract class FindNorthwindTests : TestBase
+public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat payloadFormat) : TestBase(serviceUri, payloadFormat)
 {
-	protected FindNorthwindTests(string serviceUri, ODataPayloadFormat payloadFormat) : base(serviceUri, payloadFormat) { }
-
 	protected async override Task DeleteTestData()
 	{
 		var products = await _client.For("Products").Select("ProductID", "ProductName").FindEntriesAsync();
@@ -88,7 +85,7 @@ public abstract class FindNorthwindTests : TestBase
 			.For("Products")
 			.Filter("ProductName eq 'Chai'")
 			.FindEntriesAsync();
-		Assert.Equal("Chai", products.Single()["ProductName"]);
+		products.Single()["ProductName"].Should().Be("Chai");
 	}
 
 	[Fact]
@@ -109,7 +106,7 @@ public abstract class FindNorthwindTests : TestBase
 			.For("Categories")
 			.Key(1)
 			.FindEntryAsync();
-		Assert.Equal(1, category["CategoryID"]);
+		category["CategoryID"].Should().Be(1);
 	}
 
 	[Fact]

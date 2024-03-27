@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -28,13 +28,8 @@ public class DeleteODataTestsV4Json : DeleteODataTests
 	public DeleteODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class DeleteODataTests : ODataTestBase
+public abstract class DeleteODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected DeleteODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task DeleteByKey()
 	{
@@ -53,7 +48,7 @@ public abstract class DeleteODataTests : ODataTestBase
 			.Filter("Name eq 'Test1'")
 			.FindEntryAsync();
 
-		Assert.Null(product);
+		product.Should().BeNull();
 	}
 
 	[Fact]
@@ -74,7 +69,7 @@ public abstract class DeleteODataTests : ODataTestBase
 			.Filter("Name eq 'Test1'")
 			.FindEntryAsync();
 
-		Assert.Null(product);
+		product.Should().BeNull();
 	}
 
 	[Fact]

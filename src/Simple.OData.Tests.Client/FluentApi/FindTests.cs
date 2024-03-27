@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 using Entry = System.Collections.Generic.Dictionary<string, object>;
 
@@ -19,7 +19,7 @@ public class FindTests : TestBase
 			.For("Products")
 			.Filter("ProductName eq 'Chai'")
 			.FindEntriesAsync();
-		Assert.Equal("Chai", products.Single()["ProductName"]);
+		products.Single()["ProductName"].Should().Be("Chai");
 	}
 
 	[Fact]
@@ -30,7 +30,7 @@ public class FindTests : TestBase
 			.For("Products")
 			.Filter("substringof('ai',ProductName)")
 			.FindEntriesAsync();
-		Assert.Equal("Chai", products.Single()["ProductName"]);
+		products.Single()["ProductName"].Should().Be("Chai");
 	}
 
 	[Fact]

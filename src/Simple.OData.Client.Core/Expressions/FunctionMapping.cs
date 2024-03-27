@@ -2,18 +2,11 @@
 
 internal class FunctionMapping
 {
-	public class FunctionDefinition
+	public class FunctionDefinition(ExpressionFunction.FunctionCall functionCall, FunctionMapping functionMapping, AdapterVersion adapterVersion = AdapterVersion.Any)
 	{
-		public FunctionDefinition(ExpressionFunction.FunctionCall functionCall, FunctionMapping functionMapping, AdapterVersion adapterVersion = AdapterVersion.Any)
-		{
-			FunctionCall = functionCall;
-			FunctionMapping = functionMapping;
-			AdapterVersion = adapterVersion;
-		}
-
-		public ExpressionFunction.FunctionCall FunctionCall { get; set; }
-		public FunctionMapping FunctionMapping { get; set; }
-		public AdapterVersion AdapterVersion { get; set; }
+		public ExpressionFunction.FunctionCall FunctionCall { get; set; } = functionCall;
+		public FunctionMapping FunctionMapping { get; set; } = functionMapping;
+		public AdapterVersion AdapterVersion { get; set; } = adapterVersion;
 	}
 
 	public string FunctionName { get; private set; }
@@ -30,7 +23,7 @@ internal class FunctionMapping
 			new ExpressionFunction()
 			{
 				FunctionName = function.FunctionMapping.FunctionName,
-				Arguments = new List<ODataExpression>() { target },
+				Arguments = [target],
 			});
 
 	private static readonly Func<FunctionDefinition, Func<string, ODataExpression, IEnumerable<object>, ODataExpression>> FunctionWithTargetAndArguments =
@@ -52,7 +45,7 @@ internal class FunctionMapping
 			});
 
 	public static readonly FunctionDefinition[] DefinedFunctions =
-		{
+		[
 				CreateFunctionDefinition("Contains", 1, "substringof", FunctionWithArgumentsAndTarget, AdapterVersion.V3),
 				CreateFunctionDefinition("Contains", 1, "contains", FunctionWithTargetAndArguments, AdapterVersion.V4),
 				CreateFunctionDefinition("StartsWith", 1, "startswith", FunctionWithTargetAndArguments),
@@ -83,7 +76,7 @@ internal class FunctionMapping
 				CreateFunctionDefinition("Round", 0, "round", FunctionWithTarget),
 				CreateFunctionDefinition("Floor", 0, "floor", FunctionWithTarget),
 				CreateFunctionDefinition("Ceiling", 0, "ceiling", FunctionWithTarget),
-			};
+			];
 
 	public static bool ContainsFunction(string functionName, int argumentCount)
 	{

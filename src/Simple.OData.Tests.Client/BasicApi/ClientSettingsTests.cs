@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.BasicApi;
@@ -10,7 +10,7 @@ public class ClientSettingsTests : TestBase
 	{
 		// Make sure the default doesn't contain any headers
 		var concreteClient = _client as ODataClient;
-		Assert.Null(concreteClient.Session.Settings.BeforeRequest);
+		concreteClient.Session.Settings.BeforeRequest.Should().BeNull();
 
 		// Add some headers - note this will simply set up the request action
 		// to lazily add them to the request.
@@ -18,7 +18,7 @@ public class ClientSettingsTests : TestBase
 			{
 				{"x-csrf-token", new List<string> {"fetch"}}
 			});
-		Assert.NotNull(concreteClient.Session.Settings.BeforeRequest);
+		concreteClient.Session.Settings.BeforeRequest.Should().NotBeNull();
 
 		// Make sure we can still execute a request
 		await concreteClient.GetMetadataDocumentAsync();

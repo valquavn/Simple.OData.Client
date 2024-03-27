@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -19,7 +19,7 @@ public class AggregationTests : CoreTestBase
 			.For<Employee>()
 			.Filter(x => x.Subordinates.Any(y => y.EmployeeID == 1));
 		var commandText = await command.GetCommandTextAsync();
-		Assert.Equal(expectedCommand, commandText);
+		commandText.Should().Be(expectedCommand);
 	}
 
 	[Theory]
@@ -33,7 +33,7 @@ public class AggregationTests : CoreTestBase
 			.For<Employee>()
 			.Filter(x => x.Subordinates.Any(y => y.EmployeeID == 1 && y.FirstName == "abc"));
 		var commandText = await command.GetCommandTextAsync();
-		Assert.Equal(expectedCommand, commandText);
+		commandText.Should().Be(expectedCommand);
 	}
 
 	[Theory]

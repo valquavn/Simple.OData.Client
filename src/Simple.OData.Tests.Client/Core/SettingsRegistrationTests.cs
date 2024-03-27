@@ -1,4 +1,5 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
+using Simple.OData.Client;
 using Simple.OData.Tests.Client.Entities;
 using Xunit;
 
@@ -16,7 +17,7 @@ public class SettingsRegistrationTests
 		// NB Stored under AbsoluteUri so need trailing /
 		var typeCache = TypeCaches.TypeCache("http://localhost/", null);
 
-		Assert.Equal("DynamicProperties", typeCache.DynamicContainerName(typeof(Animal)));
+		typeCache.DynamicContainerName(typeof(Animal)).Should().Be("DynamicProperties");
 	}
 
 	[Fact]
@@ -29,6 +30,6 @@ public class SettingsRegistrationTests
 		// NB Stored under AbsoluteUri so need trailing /
 		var typeCache = TypeCaches.TypeCache("http://localhost/", null);
 
-		Assert.Equal("Foo", typeCache.DynamicContainerName(typeof(Animal)));
+		typeCache.DynamicContainerName(typeof(Animal)).Should().Be("Foo");
 	}
 }

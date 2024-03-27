@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Simple.OData.Client;
+using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -29,13 +29,8 @@ public class LinkODataTestsV4Json : LinkODataTests
 	public LinkODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class LinkODataTests : ODataTestBase
+public abstract class LinkODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected LinkODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task LinkEntry()
 	{
@@ -58,8 +53,8 @@ public abstract class LinkODataTests : ODataTestBase
 			.Filter("Name eq 'Test5'")
 			.Expand(ProductCategoryName)
 			.FindEntryAsync();
-		Assert.NotNull(product[ProductCategoryName]);
-		Assert.Equal(category["ID"], ProductCategoryFunc(product)["ID"]);
+		product[ProductCategoryName].Should().NotBeNull();
+		ProductCategoryFunc(product)["ID"].Should().Be(category["ID"]);
 	}
 
 	[Fact]

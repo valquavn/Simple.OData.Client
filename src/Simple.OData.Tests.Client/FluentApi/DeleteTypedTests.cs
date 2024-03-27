@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -24,7 +24,7 @@ public class DeleteTypedTests : TestBase
 			.Filter(x => x.ProductName == "Test1")
 			.FindEntryAsync();
 
-		Assert.Null(product);
+		product.Should().BeNull();
 	}
 
 	[Fact]
@@ -46,7 +46,7 @@ public class DeleteTypedTests : TestBase
 			.Filter(x => x.ProductName == "Test1")
 			.FindEntryAsync();
 
-		Assert.Null(product);
+		product.Should().BeNull();
 	}
 
 	[Fact]

@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -437,7 +437,7 @@ public class FindDynamicTests : TestBase
 			.For(x.Transport)
 			.FindEntriesAsync();
 		Assert.Equal(2, transport.Count());
-		Assert.True(transport.All(y => y.AsDictionary().ContainsKey(FluentCommand.AnnotationsLiteral)));
+		transport.All(y => y.AsDictionary().ContainsKey(FluentCommand.AnnotationsLiteral)).Should().BeTrue();
 	}
 
 	[Fact]

@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Reflection;
@@ -24,7 +24,7 @@ public class MemberAccessorTests
 			InstanceProprety = "instancePropertyValue"
 		};
 
-		Assert.Equal(instance.InstanceProprety, MemberAccessor.GetValue<string>(instance, nameof(TestClass.InstanceProprety)));
+		MemberAccessor.GetValue<string>(instance, nameof(TestClass.InstanceProprety)).Should().Be(instance.InstanceProprety);
 	}
 
 	[Fact]
@@ -35,7 +35,7 @@ public class MemberAccessorTests
 			instanceField = "instanceFieldValue"
 		};
 
-		Assert.Equal(instance.instanceField, MemberAccessor.GetValue<string>(instance, nameof(TestClass.instanceField)));
+		MemberAccessor.GetValue<string>(instance, nameof(TestClass.instanceField)).Should().Be(instance.instanceField);
 	}
 
 	[Fact]

@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -36,7 +36,7 @@ public abstract class RequestWriterTests : CoreTestBase
 		var result = await requestWriter.CreateUpdateRequestAsync("Products", "",
 					new Dictionary<string, object>() { { "ProductID", 1 } },
 					new Dictionary<string, object>() { { "ProductName", "Chai" } }, false);
-		Assert.Equal("PATCH", result.Method);
+		result.Method.Should().Be("PATCH");
 	}
 
 	[Fact]
@@ -59,7 +59,7 @@ public abstract class RequestWriterTests : CoreTestBase
 							{ "ReorderLevel", 500 },
 							{ "Discontinued", false },
 					}, false);
-		Assert.Equal("PATCH", result.Method);
+		result.Method.Should().Be("PATCH");
 	}
 
 	[Fact]

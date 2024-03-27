@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -25,7 +25,7 @@ public class UpdateTests : TestBase
 			.Filter("ProductName eq 'Test1'")
 			.FindEntryAsync();
 
-		Assert.Equal(123m, product["UnitPrice"]);
+		product["UnitPrice"].Should().Be(123m);
 	}
 
 	[Fact(Skip = "Cannot mock")]
@@ -49,7 +49,7 @@ public class UpdateTests : TestBase
 			.Filter("ProductName eq 'Test1'")
 			.FindEntryAsync();
 
-		Assert.Equal(123m, product["UnitPrice"]);
+		product["UnitPrice"].Should().Be(123m);
 	}
 
 	[Fact]

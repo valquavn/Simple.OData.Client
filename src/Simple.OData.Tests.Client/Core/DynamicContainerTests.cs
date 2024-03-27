@@ -1,4 +1,5 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
+using Simple.OData.Client;
 using Simple.OData.Tests.Client.Entities;
 using Xunit;
 
@@ -13,7 +14,7 @@ public class DynamicContainerTests
 	{
 		TypeCache.Register<Animal>();
 
-		Assert.Equal("DynamicProperties", TypeCache.DynamicContainerName(typeof(Animal)));
+		TypeCache.DynamicContainerName(typeof(Animal)).Should().Be("DynamicProperties");
 	}
 
 	[Fact]
@@ -21,7 +22,7 @@ public class DynamicContainerTests
 	{
 		TypeCache.Register<Animal>("Foo");
 
-		Assert.Equal("Foo", TypeCache.DynamicContainerName(typeof(Animal)));
+		TypeCache.DynamicContainerName(typeof(Animal)).Should().Be("Foo");
 	}
 
 	[Fact]

@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Extensions;
@@ -46,13 +46,13 @@ public class TypeCacheTests
 	[Fact]
 	public void GetNamedProperty_BaseType()
 	{
-		Assert.NotNull(TypeCache.GetNamedProperty(typeof(Transport), "TransportID"));
+		TypeCache.GetNamedProperty(typeof(Transport), "TransportID").Should().NotBeNull();
 	}
 
 	[Fact]
 	public void GetNamedProperty_DerivedType()
 	{
-		Assert.NotNull(TypeCache.GetNamedProperty(typeof(Ship), "TransportID"));
+		TypeCache.GetNamedProperty(typeof(Ship), "TransportID").Should().NotBeNull();
 		Assert.NotNull(TypeCache.GetNamedProperty(typeof(Ship), "ShipName"));
 	}
 

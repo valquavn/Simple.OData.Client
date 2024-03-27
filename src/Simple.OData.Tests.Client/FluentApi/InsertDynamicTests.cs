@@ -1,5 +1,5 @@
 ﻿using System.Dynamic;
-using Simple.OData.Client;
+using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -29,7 +29,7 @@ public class InsertDynamicTests : TestBase
 			.Set(x.ProductName = "Test1", x.UnitPrice = 18m)
 			.InsertEntryAsync();
 
-		Assert.True((int)product.ProductID > 0);
+		((int)product.ProductID > 0).Should().BeTrue();
 		Assert.Equal("Test1", product.ProductName);
 	}
 
@@ -47,7 +47,7 @@ public class InsertDynamicTests : TestBase
 			.Set(expando)
 			.InsertEntryAsync();
 
-		Assert.True((int)product["ProductID"] > 0);
+		((int)product["ProductID"] > 0).Should().BeTrue();
 	}
 
 	[Fact]

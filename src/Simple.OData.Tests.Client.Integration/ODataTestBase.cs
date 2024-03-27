@@ -3,15 +3,9 @@ using Entry = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Simple.OData.Tests.Client;
 
-public abstract class ODataTestBase : TestBase
+public abstract class ODataTestBase(string serviceUri, ODataPayloadFormat payloadFormat, int version) : TestBase(serviceUri, payloadFormat)
 {
-	protected readonly int _version;
-
-	protected ODataTestBase(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat)
-	{
-		_version = version;
-	}
+	protected readonly int _version = version;
 
 	protected string ProductCategoryName => _version == 2 ? "Category" : "Categories";
 

@@ -61,7 +61,7 @@ public class ActionInfo
 		}
 		else
 		{
-			return (bool)AvailabilityCheckMethod.Invoke(context, new object[] { entity });
+			return (bool)AvailabilityCheckMethod.Invoke(context, [entity]);
 		}
 	}
 
@@ -75,13 +75,7 @@ public class ActionInfo
 		}
 
 		var declaringType = ActionMethod.DeclaringType;
-		var method = declaringType.GetMethod(availabilityMethodName);
-
-		if (method is null)
-		{
-			throw new Exception($"Availability Method {availabilityMethodName} was not found on type {declaringType.FullName}");
-		}
-
+		var method = declaringType.GetMethod(availabilityMethodName) ?? throw new Exception($"Availability Method {availabilityMethodName} was not found on type {declaringType.FullName}");
 		if (method.ReturnType != typeof(bool))
 		{
 			throw new Exception($"AvailabilityCheck method ({availabilityMethodName}) MUST return bool.");

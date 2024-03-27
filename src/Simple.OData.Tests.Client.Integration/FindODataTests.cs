@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -28,13 +28,8 @@ public class FindODataTestsV4Json : FindODataTests
 	public FindODataTestsV4Json() : base(ODataV4ReadOnlyUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class FindODataTests : ODataTestBase
+public abstract class FindODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected FindODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task Filter()
 	{
@@ -42,7 +37,7 @@ public abstract class FindODataTests : ODataTestBase
 			.For("Products")
 			.Filter("Name eq 'Milk'")
 			.FindEntriesAsync();
-		Assert.Equal("Milk", products.Single()["Name"]);
+		products.Single()["Name"].Should().Be("Milk");
 	}
 
 	[Fact]
@@ -63,7 +58,7 @@ public abstract class FindODataTests : ODataTestBase
 			.For("Categories")
 			.Key(1)
 			.FindEntryAsync();
-		Assert.Equal(1, category["ID"]);
+		category["ID"].Should().Be(1);
 	}
 
 	[Fact]

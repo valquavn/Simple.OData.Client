@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 #if !NET7_0_OR_GREATER && !MOCK_HTTP
 using Simple.OData.Tests.Shared.NorthwindModel;
@@ -94,7 +94,7 @@ public class TestBase : IDisposable
 		catch (AggregateException exception)
 		{
 			var innerException = exception.InnerExceptions.Single();
-			Assert.IsType<T>(innerException);
+			innerException.Should().BeOfType<T>();
 		}
 	}
 }

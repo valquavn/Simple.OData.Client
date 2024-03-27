@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using FluentAssertions;
 using Simple.OData.Client;
 using Simple.OData.Client.Extensions;
 using Xunit;
@@ -57,7 +58,7 @@ public class DictionaryExtensionsTests
 			};
 
 		var value = dict.ToObject<ClassType>(TypeCache);
-		Assert.Equal("a", value.StringProperty);
+		value.StringProperty.Should().Be("a");
 		Assert.Equal(1, value.IntProperty);
 	}
 
@@ -120,7 +121,7 @@ public class DictionaryExtensionsTests
 			};
 
 		var value = dict.ToObject<ClassType>(TypeCache);
-		Assert.Equal("a", value.StringProperty);
+		value.StringProperty.Should().Be("a");
 		Assert.Equal(1, value.IntProperty);
 	}
 
@@ -394,9 +395,8 @@ public class DictionaryExtensionsTests
 		Assert.Equal(1, value.TransportID);
 	}
 
-	private class ClassNoDefaultConstructor
+	private class ClassNoDefaultConstructor(string arg)
 	{
-		public ClassNoDefaultConstructor(string arg) { }
 	}
 
 	[Fact]

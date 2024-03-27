@@ -2,9 +2,6 @@
 
 namespace Simple.OData.Tests.Shared.ActionProvider;
 
-public class EntityFrameworkActionProvider : ActionProvider
+public class EntityFrameworkActionProvider(DbContext dbContext) : ActionProvider(dbContext, new EntityFrameworkParameterMarshaller())
 {
-	public EntityFrameworkActionProvider(DbContext dbContext) : base(dbContext, new EntityFrameworkParameterMarshaller())
-	{
-	}
 }

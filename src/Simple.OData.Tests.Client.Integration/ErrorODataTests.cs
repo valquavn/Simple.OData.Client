@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client;
@@ -28,13 +28,8 @@ public class ErrorODataTestsV4Json : ErrorODataTests
 	public ErrorODataTestsV4Json() : base(ODataV4ReadWriteUri, ODataPayloadFormat.Json, 4) { }
 }
 
-public abstract class ErrorODataTests : ODataTestBase
+public abstract class ErrorODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version) : ODataTestBase(serviceUri, payloadFormat, version)
 {
-	protected ErrorODataTests(string serviceUri, ODataPayloadFormat payloadFormat, int version)
-		: base(serviceUri, payloadFormat, version)
-	{
-	}
-
 	[Fact]
 	public async Task ErrorContent()
 	{
@@ -45,11 +40,11 @@ public abstract class ErrorODataTests : ODataTestBase
 				.Filter("NonExistingProperty eq 1")
 				.FindEntryAsync();
 
-			Assert.False(true, "Expected exception");
+			true.Should().BeFalse("Expected exception");
 		}
 		catch (WebRequestException ex)
 		{
-			Assert.NotNull(ex.Response);
+			ex.Response.Should().NotBeNull();
 		}
 		catch (Exception)
 		{

@@ -1,4 +1,5 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
+using Simple.OData.Client;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -24,6 +25,6 @@ public class UtilsTests
 	{
 		var actual = Utils.CreateAbsoluteUri(baseUri, relativePath);
 
-		Assert.Equal(expected, actual.AbsoluteUri);
+		actual.AbsoluteUri.Should().Be(expected);
 	}
 }

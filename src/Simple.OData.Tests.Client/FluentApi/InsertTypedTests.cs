@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.FluentApi;
@@ -14,7 +14,7 @@ public class InsertTypedTests : TestBase
 			.Set(new { ProductName = "Test1", UnitPrice = 18m })
 			.InsertEntryAsync();
 
-		Assert.Equal("Test1", product.ProductName);
+		product.ProductName.Should().Be("Test1");
 	}
 
 	[Fact]
@@ -26,7 +26,7 @@ public class InsertTypedTests : TestBase
 			.Set(new { ProductName = "Test1", UnitPrice = 18m })
 			.InsertEntryAsync();
 
-		Assert.True(product.ProductID > 0);
+		(product.ProductID > 0).Should().BeTrue();
 		Assert.Equal("Test1", product.ProductName);
 	}
 
@@ -130,7 +130,7 @@ public class InsertTypedTests : TestBase
 		var client = new ODataClient(CreateDefaultSettings().WithHttpMock());
 		var category = await client
 			.For<Category>()
-			.Set(new { CategoryName = "Test7", Picture = Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 }) })
+			.Set(new { CategoryName = "Test7", Picture = Convert.ToBase64String([1, 2, 3, 4, 5]) })
 			.InsertEntryAsync();
 
 		category = await client

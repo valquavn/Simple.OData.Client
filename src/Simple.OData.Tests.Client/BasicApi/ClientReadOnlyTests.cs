@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.BasicApi;
@@ -17,7 +17,7 @@ public class ClientReadOnlyTests : TestBase
 	{
 		var client = new ODataClient(CreateDefaultSettings().WithHttpMock());
 		var products = await client.FindEntriesAsync("Products");
-		Assert.True(products.Any());
+		products.Any().Should().BeTrue();
 	}
 
 	[Fact]
@@ -25,7 +25,7 @@ public class ClientReadOnlyTests : TestBase
 	{
 		var client = new ODataClient(CreateDefaultSettings().WithHttpMock());
 		var products = await client.FindEntriesAsync("Products?$filter=ProductID eq -1");
-		Assert.True(!products.Any());
+		(!products.Any()).Should().BeTrue();
 	}
 
 	[Fact]

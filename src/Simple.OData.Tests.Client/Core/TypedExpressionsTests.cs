@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Simple.OData.Client;
 using Xunit;
@@ -21,7 +22,7 @@ public class TypedExpressionV4Tests : TypedExpressionTests
 	{
 		var ids = new List<int> { 1, 2, 3 };
 		Expression<Func<TestEntity, bool>> filter = x => ids.Contains(x.ProductID);
-		Assert.Equal("(ProductID in (1,2,3))", ODataExpression.FromLinqExpression(filter).AsString(_session));
+		ODataExpression.FromLinqExpression(filter).AsString(_session).Should().Be("(ProductID in (1,2,3))");
 	}
 
 	[Fact]
@@ -29,7 +30,7 @@ public class TypedExpressionV4Tests : TypedExpressionTests
 	{
 		var names = new List<string> { "Chai", "Milk", "Water" };
 		Expression<Func<TestEntity, bool>> filter = x => names.Contains(x.ProductName);
-		Assert.Equal("(ProductName in ('Chai','Milk','Water'))", ODataExpression.FromLinqExpression(filter).AsString(_session));
+		ODataExpression.FromLinqExpression(filter).AsString(_session).Should().Be("(ProductName in ('Chai','Milk','Water'))");
 	}
 
 	[Fact]
@@ -90,10 +91,9 @@ public abstract class TypedExpressionTests : CoreTestBase
 	}
 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
-	private class JsonPropertyNameAttribute : Attribute
+	private class JsonPropertyNameAttribute(string name) : Attribute
 	{
-		public JsonPropertyNameAttribute(string name) { Name = name; }
-		public string Name { get; }
+		public string Name { get; } = name;
 	}
 
 	internal class TestEntity

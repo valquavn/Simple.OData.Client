@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
+using FluentAssertions;
 using Microsoft.Data.OData;
 using Simple.OData.Client;
 using Simple.OData.Client.V3.Adapter;
@@ -9,14 +10,9 @@ namespace Simple.OData.Tests.Client.Core;
 
 public class AdapterTests : TestBase
 {
-	private class CustomBatchWriter : BatchWriter
+	private class CustomBatchWriter(ISession session, IDictionary<object, IDictionary<string, object>> batchEntries) : BatchWriter(session, batchEntries)
 	{
-		private readonly ISession session;
-
-		public CustomBatchWriter(ISession session, IDictionary<object, IDictionary<string, object>> batchEntries) : base(session, batchEntries)
-		{
-			this.session = session;
-		}
+		private readonly ISession session = session;
 
 		protected async override Task<object> CreateOperationMessageAsync(Uri uri, string method, string collection, string contentId, bool resultRequired)
 		{
@@ -39,14 +35,9 @@ public class AdapterTests : TestBase
 		}
 	}
 
-	private class CustomAdapter : ODataAdapter
+	private class CustomAdapter(ISession session, IODataModelAdapter modelAdapter) : ODataAdapter(session, modelAdapter)
 	{
-		private readonly ISession session;
-
-		public CustomAdapter(ISession session, IODataModelAdapter modelAdapter) : base(session, modelAdapter)
-		{
-			this.session = session;
-		}
+		private readonly ISession session = session;
 
 		public override IBatchWriter GetBatchWriter(IDictionary<object, IDictionary<string, object>> batchEntries)
 		{
@@ -69,7 +60,7 @@ public class AdapterTests : TestBase
 		var settings = CreateDefaultSettings();
 		settings.AdapterFactory = new CustomAdapterFactory();
 		var client = new ODataClient(settings);
-		Assert.IsType<CustomAdapter>(client.Session.Adapter);
+		client.Session.Adapter.Should().BeOfType<CustomAdapter>();
 	}
 
 	[Fact]

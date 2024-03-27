@@ -3,14 +3,9 @@ using Microsoft.OData.Edm.Vocabularies;
 
 namespace Simple.OData.Client.V4.Adapter;
 
-public class Metadata : MetadataBase
+public class Metadata(IEdmModel model, INameMatchResolver nameMatchResolver, bool ignoreUnmappedProperties, bool unqualifiedNameCall) : MetadataBase(nameMatchResolver, ignoreUnmappedProperties, unqualifiedNameCall)
 {
-	private readonly IEdmModel _model;
-
-	public Metadata(IEdmModel model, INameMatchResolver nameMatchResolver, bool ignoreUnmappedProperties, bool unqualifiedNameCall) : base(nameMatchResolver, ignoreUnmappedProperties, unqualifiedNameCall)
-	{
-		_model = model;
-	}
+	private readonly IEdmModel _model = model;
 
 	public override string GetEntityCollectionExactName(string collectionName)
 	{
@@ -206,7 +201,7 @@ public class Metadata : MetadataBase
 			}
 		}
 
-		return string.Join("/", exactNames.ToArray());
+		return string.Join("/", [.. exactNames]);
 	}
 
 	public override bool HasNavigationProperty(string collectionName, string propertyName)
@@ -246,7 +241,7 @@ public class Metadata : MetadataBase
 
 		if (entityType.DeclaredKey is null)
 		{
-			return Array.Empty<string>();
+			return [];
 		}
 
 		return entityType.DeclaredKey.Select(x => x.Name);
@@ -320,7 +315,7 @@ public class Metadata : MetadataBase
 
 	private bool TryGetEntitySet(string entitySetName, out IEdmEntitySet entitySet)
 	{
-		if (entitySetName.Contains("/"))
+		if (entitySetName.Contains('/'))
 		{
 			entitySetName = entitySetName.Split('/').First();
 		}
@@ -342,7 +337,7 @@ public class Metadata : MetadataBase
 
 	private bool TryGetSingleton(string singletonName, out IEdmSingleton singleton)
 	{
-		if (singletonName.Contains("/"))
+		if (singletonName.Contains('/'))
 		{
 			singletonName = singletonName.Split('/').First();
 		}
@@ -375,7 +370,7 @@ public class Metadata : MetadataBase
 	private bool TryGetEntityType(string collectionName, out IEdmEntityType? entityType)
 	{
 		entityType = null;
-		if (collectionName.Contains("/"))
+		if (collectionName.Contains('/'))
 		{
 			var segments = GetCollectionPathSegments(collectionName).ToList();
 
@@ -494,26 +489,14 @@ public class Metadata : MetadataBase
 	private IEdmStructuralProperty GetStructuralProperty(IEdmStructuredType edmType, string propertyName)
 	{
 		var property = edmType.StructuralProperties().BestMatch(
-			x => x.Name, propertyName, NameMatchResolver);
-
-		if (property is null)
-		{
-			throw new UnresolvableObjectException(propertyName, $"Structural property [{propertyName}] not found");
-		}
-
+			x => x.Name, propertyName, NameMatchResolver) ?? throw new UnresolvableObjectException(propertyName, $"Structural property [{propertyName}] not found");
 		return property;
 	}
 
 	private IEdmNavigationProperty GetNavigationProperty(string collectionName, string propertyName)
 	{
 		var property = GetEntityType(collectionName).NavigationProperties()
-			.BestMatch(x => x.Name, propertyName, NameMatchResolver);
-
-		if (property is null)
-		{
-			throw new UnresolvableObjectException(propertyName, $"Association [{propertyName}] not found");
-		}
-
+			.BestMatch(x => x.Name, propertyName, NameMatchResolver) ?? throw new UnresolvableObjectException(propertyName, $"Association [{propertyName}] not found");
 		return property;
 	}
 

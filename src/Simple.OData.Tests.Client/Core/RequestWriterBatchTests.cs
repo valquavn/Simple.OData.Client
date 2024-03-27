@@ -1,4 +1,4 @@
-﻿using Simple.OData.Client;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
@@ -68,8 +68,8 @@ public abstract class RequestWriterBatchTests : CoreTestBase
 							{ "Header1","HeaderValue1"}
 					});
 
-		Assert.Equal("PATCH", result.Method);
-		Assert.True(result.Headers.TryGetValue("Header1", out var value) && value == "HeaderValue1");
+		result.Method.Should().Be("PATCH");
+		(result.Headers.TryGetValue("Header1", out var value) && value == "HeaderValue1").Should().BeTrue();
 		Assert.True(result.RequestMessage.Headers.TryGetValues("Header1", out var values) && values.Contains("HeaderValue1"));
 	}
 }
