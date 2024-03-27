@@ -36,7 +36,7 @@ jobs:
       run: dotnet build "src/Simple.OData.Client.sln" --no-restore --configuration Release --verbosity minimal
 
     - name: Test
-      run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
+      run: dotnet test "src/Simple.OData.Client.sln" --no-build --configuration Release --verbosity minimal
 
     - name: Create NuGet Packages
       run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=release /p:Version="${{ vars.RELEASE_VERSION_MAJORMINOR }}"

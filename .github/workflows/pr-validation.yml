@@ -28,5 +28,5 @@ jobs:
       run: dotnet build "src/Simple.OData.Client.sln" --no-restore --configuration Debug --verbosity minimal
 
     - name: Test
-      run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
+      run: dotnet test "src/Simple.OData.Client.sln" --no-build --configuration Debug --verbosity minimal
 
