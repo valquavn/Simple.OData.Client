@@ -19,7 +19,7 @@ jobs:
       id: build_date
       run: |
           $CurrentDateTime = Get-Date -Format "yyyyMMdd-HHmmss"
-          echo "date=${CurrentDateTime}" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=date::$CurrentDateTime"
           echo "$CurrentDateTime"
 
     - name: Get Current Time from Last Step
