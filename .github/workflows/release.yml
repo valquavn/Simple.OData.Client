@@ -1,12 +1,12 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: CI Build & Package
+name: Release Build & Package
 
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "releases/*" ]
 
 jobs:
   build:
@@ -33,13 +33,13 @@ jobs:
       run: dotnet restore "src/Simple.OData.Client.sln"
 
     - name: Build
-      run: dotnet build "src/Simple.OData.Client.sln" --no-restore --configuration Debug --verbosity minimal
+      run: dotnet build "src/Simple.OData.Client.sln" --no-restore --configuration Release --verbosity minimal
 
     - name: Test
       run: dotnet test "src/Simple.OData.Client.sln" --no-build --verbosity minimal
 
     - name: Create NuGet Packages
-      run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=debug /p:Version="${{ vars.CI_VERSION_MAJORMINOR }}-CI-${{ steps.build_date.outputs.date }}"
+      run: dotnet pack src/Simple.OData.Client.sln --no-build --output packages /p:Configuration=release /p:Version="${{ vars.RELEASE_VERSION_MAJORMINOR }}"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4

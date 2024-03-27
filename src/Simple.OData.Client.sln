@@ -49,7 +49,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build & Release", "Build & Release", "{A531893A-76E8-452E-9750-1E4F022E97D3}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
+		..\.github\workflows\nuget-deploy.yml = ..\.github\workflows\nuget-deploy.yml
 		..\.github\workflows\pr-validation.yml = ..\.github\workflows\pr-validation.yml
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{4C62DF5F-90DA-4D65-B13D-71FCDB4E92BC}"
