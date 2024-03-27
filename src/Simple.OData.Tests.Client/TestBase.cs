@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Xunit;
+using Simple.OData.Client;
 #if !NET7_0_OR_GREATER && !MOCK_HTTP
 using Simple.OData.Tests.Shared.NorthwindModel;
 #endif

@@ -1,5 +1,6 @@
 ﻿using System.Dynamic;
 using FluentAssertions;
+using Simple.OData.Client;
 using Xunit;
 using Entry = System.Collections.Generic.Dictionary<string, object>;
 

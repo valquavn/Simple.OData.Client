@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Simple.OData.Client;
 using Simple.OData.Client.V4.Adapter.Extensions;
 using Xunit;
 

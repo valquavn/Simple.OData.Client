@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using FluentAssertions;
+using Simple.OData.Client;
 using Xunit;
 
 namespace Simple.OData.Tests.Client.Core;
