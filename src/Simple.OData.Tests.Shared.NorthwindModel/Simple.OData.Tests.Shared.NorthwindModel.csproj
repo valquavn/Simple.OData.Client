@@ -14,7 +14,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Simple.OData.Tests.Shared.ActionProvider\Simple.OData.Tests.Shared.ActionProvider.csproj" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Reference Include="System.ServiceModel" />
 		<Reference Include="System.ServiceModel.Web" />
