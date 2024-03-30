@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageId>Simple.OData.Client.V3</PackageId>
+		<PackageId>Simple.OData.V3.Client</PackageId>
 		<Summary>Simple.OData.Client helps you interact with OData APIs that comply with any version of the OData standard.</Summary>
 		<Description>
 			$(Summary) This package contains everything you need to connect to OData v1 through v3 APIs.
