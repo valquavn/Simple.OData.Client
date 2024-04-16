@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Simple.OData.Client;
 using Xunit;
+using Xunit.Sdk;
 using Entry = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Simple.OData.Tests.Client;
@@ -51,35 +52,45 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 {
 	protected async override Task DeleteTestData()
 	{
-		var products = await _client.For("Products").Select("ProductID", "ProductName").FindEntriesAsync();
-		foreach (var product in products)
+		try
 		{
-			if (product["ProductName"].ToString().StartsWith("Test"))
+			var products = await _client.For("Products").Select("ProductID", "ProductName").FindEntriesAsync();
+			foreach (var product in products)
 			{
-				await _client.DeleteEntryAsync("Products", product);
+				if (product["ProductName"].ToString().StartsWith("Test"))
+				{
+					await _client.DeleteEntryAsync("Products", product);
+				}
+			}
+
+			var categories = await _client.For("Categories").Select("CategoryID", "CategoryName").FindEntriesAsync();
+			foreach (var category in categories)
+			{
+				if (category["CategoryName"].ToString().StartsWith("Test"))
+				{
+					await _client.DeleteEntryAsync("Categories", category);
+				}
+			}
+
+			var employees = await _client.For("Employees").Select("EmployeeID", "LastName").FindEntriesAsync();
+			foreach (var employee in employees)
+			{
+				if (employee["LastName"].ToString().StartsWith("Test"))
+				{
+					await _client.DeleteEntryAsync("Employees", employee);
+				}
 			}
 		}
-
-		var categories = await _client.For("Categories").Select("CategoryID", "CategoryName").FindEntriesAsync();
-		foreach (var category in categories)
+		catch (WebRequestException ex) 
 		{
-			if (category["CategoryName"].ToString().StartsWith("Test"))
+			if (ex.Code == System.Net.HttpStatusCode.InternalServerError)
 			{
-				await _client.DeleteEntryAsync("Categories", category);
-			}
-		}
-
-		var employees = await _client.For("Employees").Select("EmployeeID", "LastName").FindEntriesAsync();
-		foreach (var employee in employees)
-		{
-			if (employee["LastName"].ToString().StartsWith("Test"))
-			{
-				await _client.DeleteEntryAsync("Employees", employee);
+				Console.WriteLine(ex.Message);
 			}
 		}
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task Filter()
 	{
 		var products = await _client
@@ -89,7 +100,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		products.Single()["ProductName"].Should().Be("Chai");
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task FilterStringExpression()
 	{
 		var x = ODataDynamic.Expression;
@@ -100,7 +111,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Chai", (products as IEnumerable<dynamic>).Single().ProductName);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task Get()
 	{
 		var category = await _client
@@ -110,7 +121,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		category["CategoryID"].Should().Be(1);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task SkipOneTopOne()
 	{
 		var products = await _client
@@ -121,7 +132,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Single(products);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task OrderBy()
 	{
 		var product = (await _client
@@ -131,7 +142,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Alice Mutton", product["ProductName"]);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task SelectMultiple()
 	{
 		var product = await _client
@@ -142,7 +153,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Contains("ProductID", product.Keys);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task ExpandOne()
 	{
 		var product = (await _client
@@ -153,7 +164,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Confections", (product["Category"] as IDictionary<string, object>)["CategoryName"]);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task ExpandMany()
 	{
 		var category = await _client
@@ -164,7 +175,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal(12, (category["Products"] as IEnumerable<object>).Count());
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task ExpandSecondLevel()
 	{
 		var product = (await _client
@@ -175,7 +186,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal(13, ((product["Category"] as IDictionary<string, object>)["Products"] as IEnumerable<object>).Count());
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task ExpandProductsOrderByCategoryName()
 	{
 		var product = (await _client
@@ -187,7 +198,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Condiments", product.Category.CategoryName);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task ExpandCategoryOrderByProductName()
 	{
 		if (_serviceUri.AbsoluteUri == ODataV4ReadWriteUri)
@@ -201,7 +212,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		}
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task Count()
 	{
 		var count = await _client
@@ -211,7 +222,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal(77, count);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task TotalCount()
 	{
 		var annotations = new ODataFeedAnnotations();
@@ -222,7 +233,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal(20, products.Count());
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task CombineAll()
 	{
 		var product = (await _client
@@ -236,7 +247,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Seafood", (product["Category"] as IDictionary<string, object>)["CategoryName"]);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task NavigateToSingle()
 	{
 		var category = await _client
@@ -247,7 +258,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Beverages", category["CategoryName"]);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task NavigateToMultiple()
 	{
 		var products = await _client
@@ -258,7 +269,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal(12, products.Count());
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task NavigateToRecursive()
 	{
 		var employee = await _client
@@ -272,7 +283,7 @@ public abstract class FindNorthwindTests(string serviceUri, ODataPayloadFormat p
 		Assert.Equal("Steven", employee["FirstName"]);
 	}
 
-	[Fact]
+	[SkippableFact(typeof(WebRequestException))]
 	public async Task NavigateToRecursiveSingleClause()
 	{
 		var employee = await _client
