@@ -48,4 +48,4 @@ jobs:
     #     path: packages
 
     - name: Push to NuGet
-      run: dotnet nuget push "**/*.nupkg" --skip-duplicate --no-service-endpoint -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push "**/packages/*.nupkg" --skip-duplicate --no-service-endpoint -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
