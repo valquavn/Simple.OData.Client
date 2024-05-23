@@ -17,6 +17,7 @@
 		<PackageTags>$(PackageTags)'odata v3';'odata v4'</PackageTags>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>false</IncludeSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
