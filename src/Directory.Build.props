@@ -51,7 +51,7 @@
 		<PackageIcon>simple-odata-client.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/simple-odata-client/Simple.OData.Client/wiki</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<PackageTags>odata;'wcf data services';</PackageTags>
+		<PackageTags>odata;wcf data services; simpleodata</PackageTags>
 		<Serviceable>true</Serviceable>
 
 		<RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
