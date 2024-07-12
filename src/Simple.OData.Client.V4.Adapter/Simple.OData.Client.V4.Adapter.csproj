@@ -15,7 +15,7 @@
 			Commonly used types:
 			Simple.OData.Client.ODataClient
 		</Description>
-		<PackageTags>$(PackageTags)'odata v4';</PackageTags>
+		<PackageTags>$(PackageTags);v4;</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	
